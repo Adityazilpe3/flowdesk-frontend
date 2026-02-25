@@ -6,17 +6,17 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ProjectsPage from './pages/ProjectsPage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
 import TasksPage from './pages/TasksPage';
+import TeamPage from './pages/TeamPage';
 import { useAuth } from './context/AuthContext';
 
-const AppLayout = ({ children }) => {
-  return (
-    <div className="app-layout">
-      <Navbar />
-      <main className="page-content">{children}</main>
-    </div>
-  );
-};
+const AppLayout = ({ children }) => (
+  <div className="app-layout">
+    <Navbar />
+    <main className="page-content">{children}</main>
+  </div>
+);
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -25,21 +25,13 @@ const AppRoutes = () => {
       <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <AppLayout><DashboardPage /></AppLayout>
-        </ProtectedRoute>
-      } />
-      <Route path="/projects" element={
-        <ProtectedRoute>
-          <AppLayout><ProjectsPage /></AppLayout>
-        </ProtectedRoute>
-      } />
-      <Route path="/tasks" element={
-        <ProtectedRoute>
-          <AppLayout><TasksPage /></AppLayout>
-        </ProtectedRoute>
-      } />
+
+      <Route path="/dashboard" element={<ProtectedRoute><AppLayout><DashboardPage /></AppLayout></ProtectedRoute>} />
+      <Route path="/projects" element={<ProtectedRoute><AppLayout><ProjectsPage /></AppLayout></ProtectedRoute>} />
+      <Route path="/projects/:id" element={<ProtectedRoute><AppLayout><ProjectDetailPage /></AppLayout></ProtectedRoute>} />
+      <Route path="/tasks" element={<ProtectedRoute><AppLayout><TasksPage /></AppLayout></ProtectedRoute>} />
+      <Route path="/team" element={<ProtectedRoute><AppLayout><TeamPage /></AppLayout></ProtectedRoute>} />
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

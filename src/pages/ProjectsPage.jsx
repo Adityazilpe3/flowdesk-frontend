@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const ProjectsPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const isAdmin = user?.role === 'Admin';
 
     const [projects, setProjects] = useState([]);
@@ -81,12 +83,12 @@ const ProjectsPage = () => {
             ) : (
                 <div className="projects-grid">
                     {projects.map((project) => (
-                        <div key={project._id} className="project-card">
+                        <div key={project._id} className="project-card clickable" onClick={() => navigate(`/projects/${project._id}`)}>
                             <div className="project-card-header">
-                                <div className="project-name">{project.name}</div>
+                                <div className="project-name">📁 {project.name}</div>
                                 {isAdmin && (
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(project._id)}>
-                                        🗑 Delete
+                                    <button className="btn btn-danger btn-sm" onClick={(e) => { e.stopPropagation(); handleDelete(project._id); }}>
+                                        🗑
                                     </button>
                                 )}
                             </div>
